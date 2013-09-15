@@ -1,0 +1,15 @@
+{% extends "bet/form.html" %}
+{% load i18n %}
+
+{% block form_table_headers %}
+<tbody>
+  <tr>
+    <th><label>{% trans "Question" %}:</label></th>
+    <td>{{ object.outcome.question }}</td>
+  </tr>
+  <tr>
+    <th><label>{% trans "Outcome" %}:</label></th>
+    <td>{{ object.outcome }}</td>
+  </tr>
+</tbody>
+{% endblock %}

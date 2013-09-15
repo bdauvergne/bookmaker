@@ -1,0 +1,14 @@
+{% extends "bet/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <p>
+  {% trans "Do you confirm deletion of" %}
+    {% block what %}bet {{ object }} on « {{ object.outcome }} » of « {{ object.outcome.question }} »{% endblock %} ?
+  </p>
+  <button>{% trans "Yes" %}</button>
+  <a href="{{ view.success_url }}">{% trans "No" %}</a>
+</form>
+{% endblock %}

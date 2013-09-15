@@ -1,0 +1,122 @@
+{% extends "bet/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="questions">
+  <h1>{% trans "Recent question(s)" %}</h1>
+  <ul>
+    {% for question in questions %}
+      <li class="question">
+        <span class="question-description">{{ question.description }}</span>
+        <span class="question-status">
+          <span class="question-status-label">{% trans "Status" %}&nbsp;:</span>
+          <span class="question-status-value">{{ question.status }}</span>
+        </span>
+        <span class="question-user">
+          <span class="question-user-label">{% trans "Proposed by" %}</span>
+          <span class="question-user-value">{{ question.user.get_full_name }}</span>
+          <span>on</span>
+          <span class="question-created">{{ question.created }}</span>
+        </span>
+        {% if question.amount %}
+          <span class="question-amount">
+            <span class="question-amount-label">{% trans "Amount" %}&nbsp;:</span>
+            <span class="question-amount-value">{{ question.amount }}&nbsp;€</span>
+          </span>
+        {% endif %}
+        {% if question.user == user %}
+          {% if question.status == question.STATUS.unpublished %}
+            <span class="question-publish-action js-action">
+              <a href="{% url "question-publish" question_pk=question.pk %}">{% trans "Publish" %}</a>
+            </span>
+          {% endif %}
+          {% if question.status == question.STATUS.published %}
+            <span class="question-open-action js-action">
+              <a href="{% url "question-open" question_pk=question.pk %}">{% trans "Open" %}</a>
+            </span>
+          {% endif %}
+          {% if question.editable %}
+            <span class="question-edit-action js-action">
+              <a href="{% url "question-edit" question_pk=question.pk %}">{% trans "Edit" %}</a>
+            </span>
+            <span class="question-delete-action js-action">
+              <a href="{% url "question-delete" question_pk=question.pk %}">{% trans "Delete" %}</a>
+            </span>
+            <span class="question-create-outcome-action">
+              <a href="{% url "outcome-create" question_pk=question.pk %}">{% trans "Create new outcome" %}</a>
+            </span>
+          {% endif %}
+        {% endif %}
+        <ul class="outcomes">
+          {% for outcome in question.outcome_set.all %}
+            <li class="outcome">
+              <span class="outcome-description">{{ outcome.description }}</span>
+              <span class="outcome-user">
+                <span class="outcome-user-label">{% trans "Proposed by" %}</span>
+                <span class="outcome-user-value">{{ outcome.user.get_full_name }}</span>
+                <span>on</span>
+                <span class="outcome-created">{{ outcome.created }}</span>
+              </span>
+              {% if outcome.amount %}
+                <span class="outcome-amount">
+                  <span class="outcome-amount-caption">{% trans "Amount" %}&nbsp;:</span>
+                  <span class="outcome-amount-value">{{ outcome.amount }}&nbsp;€</span>
+                </span>
+                {% if outcome.odd %}
+                  <span class="outcome-odd">
+                    <span class="outcome-odd-caption">{% trans "Odd" %}&nbsp;:</span>
+                    <span class="outcome-odd-value">{{ outcome.odd_display }}</span>
+                  </span>
+                {% endif %}
+              {% endif %}
+              {% if question.status == question.STATUS.open %}
+                <span class="outcome-bet-action js-action">
+                  <a href="{% url "outcome-bet" question_pk=question.pk outcome_pk=outcome.pk %}">{% trans "Bet" %}</a>
+                </span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url "question-create" %}">{% trans "Create new question" %}</a></p>
+  <p><a href="{% url "question-list" %}">{% trans "All questions" %}</a></p>
+</div>
+
+<div id="bets">
+  <h1>{% trans "Your recent bets" %}</h1>
+  <ul>
+    {% for bet in bets %}
+      <li class="bet">
+        <span class="bet-outcome-description">{{ bet.outcome.description }}</span>
+        <span class="bet-question-description">{{ bet.outcome.question.description }}</span>
+        <span class="bet-amount">
+          <span class="bet-amount-label">{% trans "Amount" %}&nbsp;:</span>
+          <span class="bet-amount-value">{{ bet.amount }}&nbsp;€</span>
+        </span>
+        {% if bet.odd %}
+          <span class="bet-odd">
+            <span class="bet-odd-label">{% trans "Odd" %}&nbsp;:</span>
+            <span class="bet-odd-value">{{ bet.outcome.odd_display }}</span>
+          </span>
+          <span class="bet-gain">
+            <span class="bet-gain-label">{% trans "Possible gain" %}&nbsp;</span>
+            <span class="bet-gain-value">{{ bet.gain }}&nbsp;€</span>
+          </span>
+        {% endif %}
+        <span class="bet-delete-action js-action">
+          <a href="{% url "bet-delete" bet_pk=bet.pk %}">{% trans "Delete" %}</a>
+        </span>
+        <span class="bet-modify-action">
+          <a href="{% url "bet-edit" bet_pk=bet.pk %}">{% trans "Edit" %}</a>
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url "bet-list" %}">{% trans "All your bets" %}</a></p>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Bookmaker{% endblock %}</title>
+    <meta name="description" content="{% block head-description %}bookmaker{% endblock %}">
+    <meta name="author" content="{% block head-author %}Benjamin Dauvergne{% endblock %}">
+
+    <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "bet/css/style.css" %}" rel="stylesheet">
+    {% block extra-css %}{% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </body>
+
+  <!-- placed at the end of the document so the pages load faster -->
+  <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+  {% block extra-scripts %}{% endblock %}
+</body>
+</html>

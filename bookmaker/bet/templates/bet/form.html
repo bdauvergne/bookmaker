@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <form method="post">
+    <table>
+      {% block form_table_headers %}{% endblock %}
+      {{ form.as_table }}
+      {% block form_table_footers %}{% endblock %}
+    </table>
+    {% csrf_token %}
+    <p class="buttons">
+      <button>{% trans "Submit" %}</button>
+    </p>
+  </form>
+{% endblock %}

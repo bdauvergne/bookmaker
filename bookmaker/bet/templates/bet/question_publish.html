@@ -1,0 +1,13 @@
+{% extends "bet/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <p>
+  {% blocktrans with action=view.action_method_name model=view.model %}Do you want to {{ action }} « {{ object }} » ?{% endblocktrans %}
+  </p>
+  <button>{% trans "Yes" %}</button>
+  <a href="{% url "homepage" %}">None</a>
+</form>
+{% endblock %}
